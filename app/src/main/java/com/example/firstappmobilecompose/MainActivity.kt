@@ -58,6 +58,7 @@ fun ViewPageEarTraining(){
     Scaffold(
         topBar = { Toolbar()},
         content = { PageEarTraining()},
+        bottomBar = { Bottombar()}
     )
 }
 
@@ -68,6 +69,15 @@ fun Toolbar() {
     TopAppBar(
         title = { Text(text = "Smart Tuner", color = Color.Black) },
         backgroundColor = colorResource(id = R.color.Secondary_Color)
+    )
+}
+
+
+@Composable
+fun Bottombar(){
+    TopAppBar(
+        title = { Text(text = "Navigation-Bar",color=Color.White, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)},
+        backgroundColor = colorResource(id = R.color.purple_200)
     )
 }
 
@@ -155,7 +165,7 @@ fun PageEarTraining() {
             RowButtonLevel()
             RowButtonLevel()
             RowButtonLevelLocked()
-            Spacer(modifier = Modifier.height(85.dp))
+            Spacer(modifier = Modifier.height(70.dp))
             ButtonExit()
         }
 
