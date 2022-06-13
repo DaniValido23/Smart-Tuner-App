@@ -128,20 +128,20 @@ fun PagePrincipal() {
                     modifier = Modifier.absolutePadding(0.dp, 10.dp, 0.dp, 100.dp)
                 )
 
-                ExtendedFloatingActionButton(
-                    backgroundColor = colorResource(id = R.color.Red_Exit),
-                    onClick = { /*...*/ },
-                    text = { (Text(text = "Exit", color = Color.White)) },
-                )
-
 
             }
 
+            ButtonExit()
 
         }
 
     }
 }
+
+
+
+
+
 
 @Composable
 fun PageEarTraining() {
@@ -154,8 +154,12 @@ fun PageEarTraining() {
             RowButtonLevel()
             RowButtonLevel()
             RowButtonLevel()
-            RowButtonLevel()
+            RowButtonLevelLocked()
+            Spacer(modifier = Modifier.height(85.dp))
+            ButtonExit()
         }
+
+
     }
 }
 
@@ -168,8 +172,19 @@ fun RowButtonLevel(){
             ButtonLevels()
         }
     }
-
 }
+
+@Composable
+fun RowButtonLevelLocked(){
+    Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceAround) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+            ButtonLevelsLocked()
+            ButtonLevelsLocked()
+        }
+    }
+}
+
+
 
 
 @Composable
@@ -188,14 +203,60 @@ fun ButtonLevels(){
             Spacer(modifier = Modifier.height(10.dp))
 
             ExtendedFloatingActionButton(
-                text = { Text(text = "Start", color = Color.White, fontSize = 15.sp)},
-                modifier = Modifier.absolutePadding(27.dp).size(90.dp,50.dp),
+                text = { Text(text = "GO!", color = Color.White, fontSize = 15.sp)},
+                modifier = Modifier.size(150.dp,50.dp),
                 onClick = { /*TODO*/ },
                 backgroundColor = colorResource(id = R.color.Blue_Buttom))
             Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }
+
+@Composable
+fun ButtonLevelsLocked(){
+    Card(elevation = 0.dp, modifier = Modifier.size(150.dp)) {
+        Column(
+            modifier = Modifier.background(colorResource(id = R.color.MainBlue))
+        ) {
+            Text(text = "Level",
+                color = Color.White,
+                modifier = Modifier.absolutePadding(42.dp,15.dp,0.dp,0.dp),
+                fontSize = 25.sp
+
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            ExtendedFloatingActionButton(
+                text = { Text(text = "Locked!", color = Color.White, fontSize = 15.sp)},
+                modifier = Modifier.size(150.dp,50.dp),
+                onClick = { /*TODO*/ },
+                backgroundColor = colorResource(id = R.color.Red_Exit))
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+    }
+
+}
+
+@Composable
+fun ButtonExit(){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ExtendedFloatingActionButton(
+            backgroundColor = colorResource(id = R.color.Red_Exit),
+            onClick = { /*...*/ },
+            text = { (Text(text = "Exit", color = Color.White)) },
+        )
+    }
+}
+
+
+
 
 //Composable Prueba git
 
