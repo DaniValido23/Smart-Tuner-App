@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             //ViewPagePrincipal()
             //ViewPageEarTraining()
-            ViewPageTuner()
+            //ViewPageTuner()
         }
     }
 }
@@ -181,7 +181,6 @@ fun PageEarTraining() {
 }
 
 //Vista Afinador
-@Preview
 @Composable
 fun PageTuner() {
     LazyColumn(
@@ -200,6 +199,8 @@ fun PageTuner() {
                 contentDescription = "Smart Tuner"
             )
             ButtonChangeTopGuitar()
+            Spacer(modifier = Modifier.height(260.dp))
+            CustomLinearProgressBar()
         }
     }
 }
@@ -318,6 +319,20 @@ fun ButtonChangeTopGuitar() {
         }
     }
 }
+
+@Composable
+private fun CustomLinearProgressBar(){
+    Column(modifier = Modifier.fillMaxWidth()) {
+        LinearProgressIndicator(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(15.dp),
+            backgroundColor = Color.LightGray,
+            color = Color.Red //progress color
+        )
+    }
+}
+
 
 
 /////////////////////////////////////////////////////////////
