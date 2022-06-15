@@ -21,11 +21,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.Key.Companion.Home
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -33,15 +35,36 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.firstappmobilecompose.ui.theme.FirstAppMobileComposeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            //ViewPagePrincipal()
-            //ViewPageEarTraining()
+            ViewPagePrincipal()
             //ViewPageTuner()
+        }
+    }
+}
+
+@Composable
+fun Navigation(navController: NavHostController) {
+    NavHost(navController, startDestination = NavigationItem.Home.route){
+        composable(NavigationItem.Home.route){
+            PagePrincipal()
+        }
+        composable(NavigationItem.Hearing.route){
+            PageEarTraining()
+        }
+        composable(NavigationItem.Tuning.route){
+            NavigationItem.Tuning
         }
     }
 }
@@ -50,10 +73,13 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun ViewPagePrincipal() {
+    val navController= rememberNavController()
     Scaffold(
         topBar = { Toolbar() },
         content = { PagePrincipal() },
+        bottomBar = { BottomNavigationBar(navController)}
     )
+    Navigation(navController=navController)
 }
 
 @Preview
@@ -62,7 +88,6 @@ fun ViewPageEarTraining() {
     Scaffold(
         topBar = { Toolbar() },
         content = { PageEarTraining() },
-        bottomBar = { Bottombar() }
     )
 }
 
@@ -72,7 +97,6 @@ fun ViewPageTuner(){
     Scaffold(
         topBar = { Toolbar() },
         content = { PageTuner()},
-        bottomBar = { Bottombar() }
     )
 }
 
@@ -83,21 +107,6 @@ fun Toolbar() {
     TopAppBar(
         title = { Text(text = "Smart Tuner", color = Color.Black) },
         backgroundColor = colorResource(id = R.color.Secondary_Color)
-    )
-}
-
-@Composable
-fun Bottombar() {
-    TopAppBar(
-        title = {
-            Text(
-                text = "Navigation-Bar",
-                color = Color.White,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-        },
-        backgroundColor = colorResource(id = R.color.purple_200)
     )
 }
 
@@ -151,7 +160,7 @@ fun PagePrincipal() {
                     backgroundColor = colorResource(id = R.color.Blue_Buttom),
                     onClick = { /*...*/ },
                     text = { (Text(text = "Go Tune!", color = Color.White)) },
-                    modifier = Modifier.absolutePadding(0.dp, 10.dp, 0.dp, 100.dp)
+                    modifier = Modifier.absolutePadding(0.dp, 10.dp, 0.dp, 80.dp)
                 )
             }
             ButtonExit()
@@ -186,7 +195,7 @@ fun PageTuner() {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.Background_color_for_black))
+            .background(colorResource(id = R.color.MainBlue))
     ) {
         item {
             Spacer(modifier = Modifier.height(30.dp))
@@ -195,11 +204,12 @@ fun PageTuner() {
                     .fillMaxWidth()
                     .size(300.dp)
                     .height(400.dp),
-                painter = painterResource(id = R.drawable.top_electric_guitar),
+                painter = painterResource(id=R.drawable.guitarra),
                 contentDescription = "Smart Tuner"
             )
+            Spacer(modifier = Modifier.height(80.dp))
             ButtonChangeTopGuitar()
-            Spacer(modifier = Modifier.height(260.dp))
+            Spacer(modifier = Modifier.height(180.dp))
             CustomLinearProgressBar()
         }
     }
@@ -333,6 +343,58 @@ private fun CustomLinearProgressBar(){
     }
 }
 
+
+//Bottom Bar Navigation
+sealed class NavigationItem(var route:String,var icon:Int,var title:String){
+    object Home : NavigationItem("home",R.drawable.home,"HOME")
+    object Hearing : NavigationItem("hearing",R.drawable.hearing,"HEARING")
+    object Tuning : NavigationItem("tuning",R.drawable.guitar,"TUNER")
+}
+
+@Composable
+
+fun BottomNavigationBar(navController:NavController) {
+    val items = listOf(
+        NavigationItem.Home,
+        NavigationItem.Tuning,
+        NavigationItem.Hearing,
+
+    )
+    BottomNavigation(
+        backgroundColor = colorResource(id = R.color.Secondary_Color),
+        contentColor = Color.Black
+    ) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+        items.forEach { item ->
+            BottomNavigationItem(
+                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
+                label = { Text(text = item.title) },
+                selectedContentColor = Color.Black,
+                unselectedContentColor = Color.Black,
+                alwaysShowLabel = true,
+                selected = false,
+                onClick = {
+                    navController.navigate(item.route) {
+                        // Pop up to the start destination of the graph to
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
+                        navController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
+                        }
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
+                    }
+                }
+            )
+        }
+    }
+}
 
 
 /////////////////////////////////////////////////////////////
