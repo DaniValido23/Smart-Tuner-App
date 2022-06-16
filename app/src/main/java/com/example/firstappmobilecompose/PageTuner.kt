@@ -3,12 +3,13 @@ package com.example.firstappmobilecompose
 import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,21 +20,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 
-/*
 @Preview
 @Composable
-fun ViewPageTuner(){
+fun ViewPageTuner() {
     Scaffold(
         topBar = { TopAppBar() },
-        content = { PageTuner()},
+        content = { PageTuner() },
     )
-}*/
-
-
-
+}
 
 @Composable
 fun PageTuner() {
+    var selected by remember { mutableStateOf("Male") }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -46,19 +44,20 @@ fun PageTuner() {
                     .fillMaxWidth()
                     .size(300.dp)
                     .height(400.dp),
-                painter = painterResource(id=R.drawable.guitarra),
+                painter = painterResource(id = R.drawable.guitarra),
                 contentDescription = "Smart Tuner"
             )
             Spacer(modifier = Modifier.height(80.dp))
             ButtonChangeTopGuitar()
             Spacer(modifier = Modifier.height(180.dp))
             CustomLinearProgressBar()
+            Spacer(modifier = Modifier.height(150.dp))
         }
     }
 }
 
 @Composable
-private fun CustomLinearProgressBar(){
+private fun CustomLinearProgressBar() {
     Column(modifier = Modifier.fillMaxWidth()) {
         LinearProgressIndicator(
             modifier = Modifier
@@ -73,11 +72,11 @@ private fun CustomLinearProgressBar(){
 @Composable
 fun ButtonChangeTopGuitar() {
     Column(
-        modifier = Modifier.
-        fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Button(onClick = { /*TODO*/ }) {
             Icon(
                 imageVector = Icons.Default.Settings,
@@ -90,3 +89,25 @@ fun ButtonChangeTopGuitar() {
     }
 }
 
+
+
+
+
+
+
+
+
+
+/*var thumbIconLiked by remember { mutableStateOf(offer.likedByUser) } IconButton (onClick = {
+    thumbIconLiked = !thumbIconLiked
+}) {
+    Image(
+        painter = painterResource(
+            id = if (thumbIconLIked) {
+                R.drawable.ic_thumb_up_selected
+            } else {
+                R.drawable.ic_thumb_up
+            }
+        )
+    )
+}*/

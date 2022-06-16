@@ -142,9 +142,10 @@ fun TopAppBarPreview(){
 //Main page
 @Composable
 fun PagePrincipal() {
+    val activity =(LocalContext.current as? Activity)
     LazyColumn(
         modifier = Modifier
-            .fillMaxHeight()
+            .fillMaxSize()
             .background(colorResource(id = R.color.MainBlue))
     ) {
 
@@ -154,7 +155,7 @@ fun PagePrincipal() {
                 fontSize = 40.sp,
                 color = Color.White,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .absolutePadding(0.dp, 25.dp, 0.dp, 30.dp),
                 textAlign = TextAlign.Center
             )
@@ -180,24 +181,27 @@ fun PagePrincipal() {
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 ExtendedFloatingActionButton(
                     backgroundColor = colorResource(id = R.color.Blue_Buttom),
                     onClick = { /*...*/ },
                     text = { (Text(text = "Go Tune!", color = Color.White)) },
-                    modifier = Modifier.absolutePadding(0.dp, 10.dp, 0.dp, 30.dp)
                 )
 
-                val activity =(LocalContext.current as? Activity)
+                Spacer(modifier = Modifier.height(40.dp))
+
                 ExtendedFloatingActionButton(
                     backgroundColor = colorResource(id = R.color.Red_Exit),
                     onClick = { activity?.finish()},
                     text = { (Text(text = "Exit", color = Color.White)) },
                 )
+
+                Spacer(modifier = Modifier.height(100.dp))
+
             }
 
         }
